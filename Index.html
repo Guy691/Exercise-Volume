@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<!-- Created by /u/Guy691 for /r/ProgrammerHumor -->
+	<title>ACME Exercise Machine</title>
+	<style>
+		body {
+			text-align: center;
+			font-family: Arial;
+		}
+	
+		div.topContainer {
+			border: solid;
+			border-radius: 5px;
+			border-color: #b0b0b0;
+			width: 500px;
+			height: auto;
+			margin: 50px auto;
+			padding: 40px;
+		}
+		
+		div.key {
+			display: inline;
+			border: solid;
+			border-color: #a0a0a0;
+			border-radius: 6px;
+			padding: 8px;
+			font-size: 24px;
+			color: #0f0f0f;
+		}
+	</style>
+	<script>
+		window.onload = setInterval(countDown, 30);
+		
+		var keySwitch = false;
+		
+		function countDown() {
+			document.getElementById("sliderBar").value--;
+			showVol();
+		}
+		
+		function monitorDown(detect) {
+			var keyP = detect.keyCode? detect.keyCode:detect.charCode;
+			if (keyP == 37 && keySwitch == false) {
+				addValue();keySwitch = true;changeDisplay("Left","Right");
+			}
+			if (keyP == 39 && keySwitch == true) {
+				addValue();keySwitch = false;changeDisplay("Right","Left");
+			}
+		}
+		
+		function addValue() {document.getElementById("sliderBar").value = document.getElementById("sliderBar").value + 5;}
+		
+		function changeDisplay(ident,nIdent) {
+			document.getElementById("k"+ident).style.backgroundColor = "#a0a0a0";
+			document.getElementById("k"+nIdent).style.backgroundColor = "#fff";
+		}
+		
+		function setCustom() {
+			var customFile = URL.createObjectURL(document.getElementById("customVideo").files[0]);
+			document.getElementById("elVideo").src = customFile;
+			alert("Success");
+		}
+		
+		function showVol() {
+			document.getElementById("volVal").innerHTML = document.getElementById("sliderBar").value + "%";
+			document.getElementById("elVideo").volume = document.getElementById("sliderBar").value/100
+			;
+			alert(document.getElementById("elVideo").volume);
+		}
+	</script>
+</head>
+<body onkeydown="monitorDown(event)">
+	<div class="topContainer">
+		<h2>Exercise While You Watch Videos</h2>
+		<video id="elVideo" src="./video.mp4" type="video" style="width:480px;" autoplay loop></video><br />
+		<input id="customVideo" type="file" onChange="setCustom()" accept="video/*"><br /><h6>(Only works with some videos, don't ask me why)</h6><br />
+			Volume: <span id="volVal">0%</span><br />
+			<meter id="sliderBar" type="range" readonly="true" style="width:300px;height:50px" value="0" min="0" max="100" onchange="showVol()"></meter><br /><br />
+			<div class="key" id="kLeft"><span id="tLeft">&#8592;</span></div> <div class="key" id="kRight"><span id="tRight">&#8594;</span></div>
+	</div>
+</body>
+</html>
